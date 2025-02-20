@@ -1,0 +1,6 @@
+enum ERole {
+  ADMIN = "ADMIN",
+  DEV = "CONTRIBUTOR",
+  TESTER = "MAINTAINER",
+  VIEWER = "VIEWER",
+}
