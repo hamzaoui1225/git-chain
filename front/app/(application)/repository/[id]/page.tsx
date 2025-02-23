@@ -111,14 +111,18 @@ export default function Repository({ params }: { params?: { id: string } }) {
                     <TableColumn>Date</TableColumn>
                   </TableHeader>
                   <TableBody>
-                    {commit.map((c, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{c.short_id}</TableCell>
-                        <TableCell>{c.message}</TableCell>
-                        <TableCell>{c.author_name}</TableCell>
-                        <TableCell>{c.committed_date}</TableCell>
-                      </TableRow>
-                    ))}
+                    {commit && commit.length > 0 ? (
+                      commit.map((c, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{c.short_id}</TableCell>
+                          <TableCell>{c.message}</TableCell>
+                          <TableCell>{c.author_name}</TableCell>
+                          <TableCell>{c.committed_date}</TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <></>
+                    )}
                   </TableBody>
                 </Table>
               </CardBody>
