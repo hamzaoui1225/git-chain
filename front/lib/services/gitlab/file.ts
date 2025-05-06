@@ -1,16 +1,11 @@
+import { blockChainBaseUrl } from "../blockchain/block-config";
+import { gitlab_api_endpoint } from "../gitlab-config";
 
 const workingBranch = "?ref=main";
-const gitlabFileURL =
-  "http://localhost:8000/api/v4/projects/1/repository/files/";
+const gitlabFileURL = gitlab_api_endpoint + "/projects/1/repository/files/";
+const gitlabFolderURL = gitlab_api_endpoint + "/projects/1/repository/tree?path=";
+const gitlabRootFolderURL = gitlab_api_endpoint + "/projects/1/repository/tree";
 
-const gitlabFolderURL =
-  "http://localhost:8000/api/v4/projects/1/repository/tree?path=";
-const gitlabRootFolderURL =
-  "http://localhost:8000/api/v4/projects/1/repository/tree";
-
-const headerConfig = {
-  Authorization: "Basic " + process.env.GITLAB_TOKEN,
-};
 
 function decodeBase64(base64: string): string {
   return Buffer.from(base64, "base64").toString("utf8");
@@ -18,7 +13,7 @@ function decodeBase64(base64: string): string {
 
 export async function getFileRawData(filePath: string) {
   const decrypt = await fetch(
-    `${gitlabFileURL}${filePath}${workingBranch}`,
+    `${gitlabFileURL}${filePath.replaceAll("/","%2F")}${workingBranch}`,
   ).then((res) => res.json());
 
   return decodeBase64(decrypt.content);
@@ -32,7 +27,7 @@ export async function getRootFolder() {
   return await fetch(`${gitlabRootFolderURL}`).then((res) => res.json());
 }
 
-const testRaw = "http://127.0.0.1:8000/root/deepseek/-/raw/main/";
+const testRaw = blockChainBaseUrl + "/root/deepseek/-/raw/main/";
 
 export const rawFile = async (filePath: string) =>
   await fetch(`${testRaw}${filePath}`).then((res) => res.text());

@@ -1,19 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-import { getRepositoryMembers } from "@/lib/services/gitlab/repository";
+import { useUser } from "@/lib/providers/UserContent";
 
 export default function TEST() {
-  const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => await getRepositoryMembers("1");
+  const { user } = useUser();
 
-    fetchData().then((value) => {
-      setData(value);
-    });
-  }, []);
-
-  return <>{data.length}</>;
+  return <>{JSON.stringify(user)}</>;
 }

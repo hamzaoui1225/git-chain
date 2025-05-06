@@ -2,7 +2,7 @@ import { Db, MongoClient } from "mongodb";
 
 let connection: MongoClient;
 
-const url = process.env.MONGO_URL ?? "mongodb://localhost:27017/";
+const url = process.env.MONGO_URL ?? "mongodb://192.168.1.26:27017/";
 const database = process.env.MONGO_DATABASE ?? "gitchain";
 
 async function initConnection() {

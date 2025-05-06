@@ -1,135 +1,80 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use } from "react";
 import { Tab, Tabs } from "@heroui/tabs";
-import { Code, GitPullRequestArrow, Users } from "lucide-react";
-import { Card, CardBody } from "@heroui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "@heroui/table";
-import { TableColumn } from "@heroui/react";
+import { Code, GitCommitHorizontal, UserPlus2, Users } from "lucide-react";
 
+import { RepositoryInfoDisplay } from "@/components/ui/repository/repository_info_displayer";
+import RepositoryCommitDisplayer from "@/components/ui/repository/repository_commit_displayer";
+import RepositoryMembersDisplayer from "@/components/ui/repository/repository_members_displayer copy";
 import FileExplorer from "@/components/ui/code/FileExplorer";
-import {
-  fetchRepositoryById,
-  getRepositoryCommits,
-  getRepositoryMembers,
-} from "@/lib/services/gitlab/repository";
-import UserTable from "@/components/ui/UserTable";
+import { useUser } from "@/lib/providers/UserContent";
+import JoinRequestTable from "@/components/ui/repository/request/join_request_display";
 
-export default function Repository({ params }: { params?: { id: string } }) {
-  const [loading, setLoading] = useState(true);
-  const [repository, setRepository] = useState({});
-  const [member, setMember] = useState([]);
-  const [commit, setCommit] = useState([]);
-
-  useEffect(() => {
-    Promise.all([
-      fetchRepositoryById(params?.id).then((res) => {
-        setRepository(res);
-      }),
-      getRepositoryMembers(params?.id).then((res) => {
-        setMember(res);
-      }),
-      getRepositoryCommits(params?.id).then((res) => {
-        setCommit(res);
-      }),
-    ]).then(() => {
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return <h1 className="text-4xl text-center">Loading...</h1>;
+export default function Repository({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+  const { user } = useUser();
 
   return (
-    <>
-      <div className="flex gap-4 pb-10 items-center">
-        <div className="w-40 h-40 rounded-full bg-amber-900 overflow-hidden border-4 border-blue-600">
-          <div>
-            <img
-              alt={"repo image"}
-              height={500}
-              src={repository?.namespace?.avatar_url}
-              width={500}
-            />
-          </div>
-        </div>
-        <div>
-          <span className="font-extrabold text-4xl">{repository.name}</span>
-          <h6>{repository.created_at}</h6>
-        </div>
-      </div>
+    <div className="space-y-5">
+      <RepositoryInfoDisplay repositoryId={id} />
+      <div>
 
-      <div className="flex w-full flex-col">
-        <Tabs aria-label="Options" color="primary" variant="bordered">
-          <Tab
-            key="photos"
-            title={
-              <div className="flex items-center space-x-2">
-                <Code />
-                <span>Code</span>
-              </div>
+        <div className="flex w-full flex-col">
+          <Tabs aria-label="Options" color="primary" >
+            <Tab
+              key="code"
+              title={
+                <div className="flex items-center space-x-2 ">
+                  <Code />
+                  <span>Code</span>
+                </div>
+              }
+            >
+              {id && <FileExplorer projectId={id} />}
+            </Tab>
+            <Tab
+              key="members"
+              title={
+                <div className="flex items-center space-x-2">
+                  <Users />
+                  <span>Members</span>
+                </div>
+              }>
+              <RepositoryMembersDisplayer repositoryId={id} />
+            </Tab>
+            <Tab
+              key="commit"
+              title={
+                <div className="flex items-center space-x-2">
+                  <GitCommitHorizontal />
+                  <span>Commit</span>
+                </div>
+              }
+            >
+              <RepositoryCommitDisplayer repositoryId={id} />
+            </Tab>
+            {user.role == 'admin' &&
+              <Tab
+                key="join"
+                title={
+                  <div className="flex items-center space-x-2">
+                    <UserPlus2 />
+                    <span>Join Request</span>
+                  </div>
+                }
+              >
+                <JoinRequestTable projectId={id} />
+              </Tab>
             }
-          >
-            <FileExplorer />
-          </Tab>
-          <Tab
-            key="music"
-            title={
-              <div className="flex items-center space-x-2">
-                <Users />
-                <span>Members ({member.length})</span>
-              </div>
-            }
-          >
-            <Card>
-              <CardBody>
-                <UserTable users={member} />
-              </CardBody>
-            </Card>
-          </Tab>
-          <Tab
-            key="contribution"
-            title={
-              <div className="flex items-center space-x-2">
-                <GitPullRequestArrow />
-                <span>Contribution</span>
-              </div>
-            }
-          >
-            <Card>
-              <CardBody>
-                <Table>
-                  <TableHeader>
-                    <TableColumn>Commit ID</TableColumn>
-                    <TableColumn>Message</TableColumn>
-                    <TableColumn>Author</TableColumn>
-                    <TableColumn>Date</TableColumn>
-                  </TableHeader>
-                  <TableBody>
-                    {commit && commit.length > 0 ? (
-                      commit.map((c, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{c.short_id}</TableCell>
-                          <TableCell>{c.message}</TableCell>
-                          <TableCell>{c.author_name}</TableCell>
-                          <TableCell>{c.committed_date}</TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <></>
-                    )}
-                  </TableBody>
-                </Table>
-              </CardBody>
-            </Card>
-          </Tab>
-        </Tabs>
+          </Tabs>
+        </div>
+
       </div>
-    </>
+    </div>
   );
 }

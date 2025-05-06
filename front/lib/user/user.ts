@@ -1,5 +1,5 @@
 
-const gitlabBaseUrl = 'http://localhost:8000/api/v4/';
+const gitlabBaseUrl = 'http://192.168.1.26:8080/api/v4/';
 
 const headerConfig = {
   "Content-Type": "application/json",

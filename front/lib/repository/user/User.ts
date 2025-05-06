@@ -12,7 +12,7 @@ export async function addUser(data: TUser) {
   return (await user()).insertOne(data);
 }
 
-export async function getUserById(data: any) {
+async function getUserByIds(data: any) {
   return (await user()).findOne(data);
 }
 

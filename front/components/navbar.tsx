@@ -13,6 +13,8 @@ import {
   DropdownMenu,
   Avatar,
 } from "@heroui/react";
+import { Gitlab } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const AcmeLogo = () => {
   return (
@@ -64,34 +66,35 @@ export const SearchIcon = ({
 };
 
 export default function TopBar() {
+
   return (
     <Navbar isBordered>
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
-          <AcmeLogo />
-          <p className="hidden sm:block font-bold text-inherit">ACME</p>
+          <Gitlab />
+          <p className="hidden sm:block font-bold text-inherit pl-2">Git-Chain</p>
         </NavbarBrand>
         <NavbarContent className="hidden sm:flex gap-3">
           <NavbarItem>
-            <Link color="foreground" href="#">
-              Features
-            </Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Link aria-current="page" color="secondary" href="#">
-              Customers
+            <Link color="foreground" href="/repository">
+              Repository
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link color="foreground" href="#">
-              Integrations
+            <Link aria-current="page" color="foreground" href="/users">
+              Users
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link color="foreground" href="/block">
+              Blocks
             </Link>
           </NavbarItem>
         </NavbarContent>
       </NavbarContent>
 
       <NavbarContent as="div" className="items-center" justify="end">
-        <Input
+        {/* <Input
           classNames={{
             base: "max-w-full sm:max-w-[10rem] h-10",
             mainWrapper: "h-full",
@@ -103,7 +106,7 @@ export default function TopBar() {
           size="sm"
           startContent={<SearchIcon size={18} />}
           type="search"
-        />
+        /> */}
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar

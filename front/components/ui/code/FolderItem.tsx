@@ -7,9 +7,13 @@ import { TTree } from "@/components/ui/code/TTree";
 import RenderTree from "@/components/ui/code/RenderTree";
 
 export default function FolderItem({
-  folder
+  folder,
+  projectId,
+  setFile
 }: {
+  setFile: Dispatch<SetStateAction<string>>;
   folder: TTree;
+  projectId: string;
 }) {
   const [isOpen, setOpen] = useState(false);
 
@@ -25,7 +29,7 @@ export default function FolderItem({
       </div>
       {isOpen && (
         <div className="pl-4">
-          <RenderTree path={folder.path} />
+          <RenderTree setFile={setFile} projectId={projectId} path={folder.path} />
         </div>
       )}
     </div>

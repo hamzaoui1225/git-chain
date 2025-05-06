@@ -71,7 +71,7 @@ function File({ data, setFileContent }) {
     <div className="flex gap-1 text-lg font-bold" onClick={async () => {
       setFileContent(await file())
     }}>
-      <FileText className="text-white" />
+      <FileText className="text-white " />
       <span>{data.name}</span>
     </div>
   );

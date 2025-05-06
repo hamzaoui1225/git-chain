@@ -1,0 +1,1 @@
+export const blockChainBaseUrl = "http://localhost:8008"
