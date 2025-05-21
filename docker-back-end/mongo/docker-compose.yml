@@ -1,0 +1,27 @@
+services:
+
+  static-service:
+    container_name: static-service
+    build: ./httpd
+    ports:
+      - 80:80
+    volumes:
+      - ./shared-data:/home/static
+
+  upload-service:
+    container_name: upload-service
+    build: ./upload
+    ports:
+      - 8000:8000
+    volumes:
+      - ./shared-data:/data
+  
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+

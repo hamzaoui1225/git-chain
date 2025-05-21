@@ -1,0 +1,90 @@
+services:
+  sawtooth-validator:
+    image: hyperledger/sawtooth-validator:1.2
+    container_name: sawtooth-validator
+    networks:
+      - sawtooth-net
+    ports:
+      - 4004:4004
+    volumes:
+      - ./keys:/etc/sawtooth/keys
+    entrypoint: "bash -c \"\
+        sawadm keygen --force && \
+        sawtooth keygen --force my_key && \
+        sawset genesis -k /root/.sawtooth/keys/my_key.priv && \
+        sawset proposal create \
+          -k /root/.sawtooth/keys/my_key.priv \
+          sawtooth.consensus.algorithm.name=Devmode \
+          sawtooth.consensus.algorithm.version=0.1 \
+          -o config.batch && \
+        sawadm genesis config-genesis.batch config.batch && \
+        sawtooth-validator -vv \
+          --endpoint tcp://validator:8800 \
+          --bind component:tcp://eth0:4004 \
+          --bind network:tcp://eth0:8800 \
+          --bind consensus:tcp://eth0:5050 \
+        \""
+
+  sawtooth-rest-api:
+    image: hyperledger/sawtooth-rest-api:1.2
+    container_name: sawtooth-rest-api
+    networks:
+      - sawtooth-net
+    ports:
+      - "8008:8008"
+    depends_on:
+      - sawtooth-validator
+    entrypoint: sawtooth-rest-api --connect tcp://sawtooth-validator:4004 --bind 0.0.0.0:8008
+
+  sawtooth-settings:
+    image: hyperledger/sawtooth-settings-tp:1.2
+    container_name: sawtooth-settings
+    networks:
+      - sawtooth-net
+    entrypoint: settings-tp -vv --connect tcp://sawtooth-validator:4004
+    depends_on:
+      - sawtooth-validator
+
+  private-scorechain-tp:
+    build: ./scorechain-tp
+    container_name: private-scorechain-tp
+    networks:
+      - sawtooth-net
+    depends_on:
+      - sawtooth-validator
+    entrypoint: "python3 scorechain_tp.py --connect tcp://sawtooth-validator:4004"
+
+  private-scorechain-client:
+    build: ./private-scorechain-client
+    container_name: private-scorechain-client
+    network_mode: host
+    ports:
+      - 5000:5000
+    depends_on:
+      - sawtooth-rest-api
+    working_dir: /app
+    entrypoint: "python3 -m flask run -h 0.0.0.0 -p 5000"
+
+  public-scorechain-client:
+    build: ./public-scorechain-client
+    container_name: public-scorechain-client
+    network_mode: host
+    ports:
+      - 5000:5000
+    depends_on:
+      - sawtooth-rest-api
+    working_dir: /app
+    entrypoint: "python3 -m flask run -h 0.0.0.0 -p 5000"
+
+
+  public-scorechain-tp:
+    build: ./scorechain-tp
+    container_name: public-scorechain-tp
+    networks:
+      - sawtooth-net
+    depends_on:
+      - sawtooth-validator
+    entrypoint: "python3 scorechain_tp.py --connect tcp://sawtooth-validator:4004"
+
+networks:
+  sawtooth-net:

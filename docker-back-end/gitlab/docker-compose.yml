@@ -1,0 +1,15 @@
+services:
+  gitlab-server:
+    image: 'gitlab/gitlab-ce:latest'
+    container_name: gitlab-server
+    hostname: 'localhost'
+    ports:
+      - '8080:80'
+      - '8443:443'
+      - '2222:22'
+    volumes:
+      - './data/config:/etc/gitlab'
+      - './data/logs:/var/log/gitlab'
+      - './data/data:/var/opt/gitlab'
+      - './data/config/ssl:/etc/gitlab/ssl'
+    shm_size: '256m'
