@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Navbar as HeroUINavbar,
   NavbarContent,
@@ -17,6 +19,7 @@ import { Gitlab, SearchIcon } from "lucide-react";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
+import {Avatar} from "@heroui/react";
 
 export const Navbar = () => {
 
@@ -77,11 +80,17 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
+        <Avatar
+          isBordered
+          color="primary"
+          src="https://www.gravatar.com/avatar/e18a5a665078c0d921686cb79bebfc3b4f0be4fcb91d88dab719f47bfb66d9e1?s=80&d=identicon"
+        />
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
         <ThemeSwitch />
         <NavbarMenuToggle />
+
       </NavbarContent>
       <NavbarMenu>
         <div className="mx-4 mt-2 flex flex-col gap-2">

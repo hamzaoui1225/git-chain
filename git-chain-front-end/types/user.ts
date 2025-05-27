@@ -5,4 +5,5 @@ export interface TUser {
   username: string;
   avatar_url?: string;
   bot: boolean;
+  is_admin: boolean;
 }

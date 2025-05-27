@@ -4,7 +4,7 @@ import {
   GITLAB_CLIENT_ID,
   GITLAB_CLIENT_SECRET,
     GITLAB_ENDPOINT_AUTH,
-} from "@/libs/config";
+} from "@/config/gitlab";
 import {encrypt} from "@/libs/auth/sessions";
 import {cookies} from "next/headers";
 

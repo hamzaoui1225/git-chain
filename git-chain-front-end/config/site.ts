@@ -18,7 +18,7 @@ export const siteConfig = {
     },
     {
       label: "Block",
-      href: "/block",
+      href: "/blocks",
     },
   ],
   navMenuItems: [
@@ -36,7 +36,7 @@ export const siteConfig = {
     },
     {
       label: "Block",
-      href: "/block",
+      href: "/blocks",
     },
   ],
 };

@@ -1,4 +1,4 @@
-import { GITLAB_ENDPOINT_PROJECTS, GITLAB_HEADER } from "@/libs/config";
+import { GITLAB_ENDPOINT_PROJECTS, GITLAB_HEADER } from "@/config/gitlab";
 
 export async function GET() {
   const data = await fetch(GITLAB_ENDPOINT_PROJECTS, {

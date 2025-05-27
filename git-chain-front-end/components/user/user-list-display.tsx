@@ -7,7 +7,11 @@ import { useRouter } from "next/navigation";
 
 import { TUser } from "@/types/user";
 
-export default function UserListDisplay() {
+export default function UserListDisplay({
+  admin = false,
+}: {
+  admin?: boolean;
+}) {
   const [users, setUsers] = useState<TUser[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +39,7 @@ export default function UserListDisplay() {
       <div className="grid gap-4 grid-cols-1">
         {users
           .filter((user) => !user.bot)
+          .filter((user) => user.is_admin == admin)
           .map((user) => (
             <div
               key={user.id}

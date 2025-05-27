@@ -41,7 +41,7 @@ export default defineConfig([globalIgnores([
     "!**/jest.config.js",
     "!**/plopfile.js",
     "!**/react-shim.js",
-    "!**/tsup.config.ts",
+    "!**/tsup.gitlab.ts",
 ]), {
     extends: fixupConfigRules(compat.extends(
         "plugin:react/recommended",

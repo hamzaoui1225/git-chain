@@ -19,8 +19,6 @@ export default function RegisterPage() {
   const [rePassword, setRePassword] = useState("");
   const [password, setPassword] = useState("");
 
-  window?.localStorage.setItem("userId", "hikai");
-
   const checkForm = () => {
     if (!username && !password && !rePassword && !name) {
       setError("All field must present");

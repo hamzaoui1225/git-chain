@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Button } from "@heroui/button";
 import { Plus } from "lucide-react";
 
 import ProjectsListDisplay from "@/components/project/projects-list-display";
@@ -14,7 +15,28 @@ export default function ProjectsListPage() {
           <Plus size={18} />
         </Button>
       </div>
-      <ProjectsListDisplay />
+      <div className="grid md:grid-cols-2 grid-cols-1 gap-2 pt-5">
+        <Card>
+          <CardHeader>
+            <h1 className="font-bold text-lg text-center flex justify-center pt-4 w-full">
+              Public Projects
+            </h1>
+          </CardHeader>
+          <CardBody>
+            <ProjectsListDisplay />
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
+            <h1 className="font-bold text-lg text-center flex justify-center pt-4 w-full">
+              Private Projects
+            </h1>
+          </CardHeader>
+          <CardBody>
+            <ProjectsListDisplay privateRepositories="private" />
+          </CardBody>
+        </Card>
+      </div>
     </div>
   );
 }

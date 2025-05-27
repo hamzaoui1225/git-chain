@@ -18,7 +18,7 @@ export default function Repository({
     const { id } = use(params);
 
     return (
-        <div className="space-y-5">
+        <div className="space-y-5 pt-10">
             <RepositoryInfoDisplay repositoryId={id} />
             <div>
 
